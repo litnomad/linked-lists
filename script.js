@@ -67,6 +67,12 @@ class LinkedList {
 
   // represents objects as strings. the format should be: ( value ) -> ( value ) -> ( value ) -> null
   toString(string = "", nextNode) {
+    if (this.head == null) {
+      string += "null";
+      console.log(string);
+      return;
+    }
+
     let copy;
     if (!nextNode) {
       copy = this.head;
@@ -89,6 +95,7 @@ class LinkedList {
 }
 
 let list = new LinkedList();
+list.toString();
 list.append("dog");
 console.log(list.append("cat"));
 console.log(list.append(4));
