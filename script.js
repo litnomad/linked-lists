@@ -32,7 +32,7 @@ class LinkedList {
       }
       // creates a new node when null is reached
       if (copy.nextNode == null) {
-        return copy.nextNode = new Node(value);
+        return (copy.nextNode = new Node(value));
       }
     }
   }
@@ -65,29 +65,26 @@ class LinkedList {
     // returns the index of the node containing the given value. If an index can't be found, return -1. If more than one node has a matching value, it should return the index of the first node with the matching value.
   }
 
-  toString() {
-    //  The format should be: ( value ) -> ( value ) -> ( value ) -> null
-    console.log(
-      "( ",
-      this.head.value,
-      " )",
-      " -> ",
-      "( ",
-      this.head.nextNode.value,
-      " )",
-      " -> ",
-      "( ",
-      this.head.nextNode.nextNode.value,
-      " )",
-      " -> ",
-      "( ",
-      this.head.nextNode.nextNode.nextNode.value,
-      " )",
-      " -> ",
-      "( ",
-      this.head.nextNode.nextNode.nextNode.nextNode,
-      " )",
-    );
+  // represents objects as strings. the format should be: ( value ) -> ( value ) -> ( value ) -> null
+  toString(string = "", nextNode) {
+    let copy;
+    if (!nextNode) {
+      copy = this.head;
+    } else {
+      copy = nextNode;
+    }
+
+    if (copy.value !== null) {
+      string += `( ${copy.value} ) -> `;
+    }
+    if (copy.nextNode == null) {
+      string += "null";
+    } else {
+      nextNode = copy.nextNode;
+      return this.toString(string, nextNode);
+    }
+    console.log(string);
+    return string;
   }
 }
 
@@ -95,5 +92,5 @@ let list = new LinkedList();
 list.append("dog");
 console.log(list.append("cat"));
 console.log(list.append(4));
-//list.append(6);
-//list.toString();
+console.log(list.append(6));
+list.toString();
