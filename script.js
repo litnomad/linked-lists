@@ -39,10 +39,9 @@ class LinkedList {
 
   // adds a new node containing value to the start of the list
   prepend(value) {
-    const append = this.head;
+    const tail = this.head;
     this.head = new Node(value);
-    this.head.nextNode = append;
-    console.log("prepend", this.head);
+    this.head.nextNode = tail;
     return this.head;
   }
 
@@ -99,12 +98,9 @@ class LinkedList {
       if (current.value == value) {
         return true;
       }
-
       current = current.nextNode;
     }
-    if (current == null) {
-      return false;
-    }
+    return false;
   }
 
   // returns the index of the node containing the given value. If an index can't be found, return -1. If more than one node has a matching value, returns the index of the first node with the matching value.
@@ -150,19 +146,69 @@ class LinkedList {
 
     return string;
   }
+
+  // insert new nodes with the given values at the given index
+  insertAt(index, ...values) {
+    let current = this.head;
+
+    // if index is 0, replace head
+    if (index === 0) {
+      const oldHead = this.head;
+
+      for (let i = 0; values[i] !== undefined; i++) {
+        this.head = new Node(values[i]);
+      }
+      return (this.head.nextNode = oldHead);
+    }
+
+    // find current at index
+    while (index - 1 > 0) {
+      current = current.nextNode;
+      index--;
+    }
+
+    // throw a range error if index is out of bounds
+    if (current == null) {
+      throw new RangeError("Index is out of bounds.");
+    }
+
+    // move current nodes to tail
+    const tail = current.nextNode;
+
+    // insert new nodes at current
+    for (let i = 0; values[i] !== undefined; i++) {
+      current.nextNode = new Node(values[i]);
+      current = current.nextNode;
+    }
+
+    // appends tail
+    if (current.nextNode == null) {
+      current.nextNode = tail;
+    }
+  }
+
+  // removes the node at the given index. If the given index is out of bounds (below 0 or greater than or equal to the list’s size), throw a RangeError
+  removeAt(index) {
+    if (index === 0) {
+      this.head = this.head.nextNode;
+      return;
+    }
+
+    let current = this.head;
+    // traverse to the node right before the target index
+    for (let i = 0; i < index - 1; i++) {
+      if (current == null) {
+        throw new RangeError("Index is out of bounds.");
+      }
+      current = current.nextNode;
+    }
+    // change pointer reference of the node to the remaining tail
+    if (current.nextNode.nextNode == null) {
+      return (current.nextNode = null);
+    } else {
+      current.nextNode = current.nextNode.nextNode;
+    }
+  }
 }
 
-let list = new LinkedList();
-console.log(list.append("dog"));
-console.log(list.append("cat"));
-console.log(list.append("igloo"));
-console.log(list.append("igloo"));
-console.log(list.size());
-console.log(list.firstNode());
-console.log(list.at(2));
-console.log(list.at(4));
-console.log(list.pop());
-console.log(list.toString());
-console.log(list.contains("igloo"));
-console.log(list.contains("dog"));
-console.log(list.findIndex("igloo"));
+export { LinkedList };
